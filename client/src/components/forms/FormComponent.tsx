@@ -88,36 +88,40 @@ const FormComponent = () => {
                     </p>
                 </div>
                 <form onSubmit={joinRoom} className="flex w-full flex-col gap-4">
-                    <div className="relative flex flex-col gap-2">
+                    <div className="flex flex-col gap-2">
                         <label htmlFor="roomId" className="text-sm font-medium text-white/80">
                             Room ID
                         </label>
-                        <Key className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform text-white/40" />
-                        <input
-                            id="roomId"
-                            type="text"
-                            name="roomId"
-                            placeholder="e.g. build-together-123"
-                            className="w-full rounded-2xl border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white placeholder-white/40 outline-none transition focus:border-primary focus:bg-white/10 focus:shadow-[0_0_0_2px_rgba(57,224,121,0.3)]"
-                            onChange={handleInputChanges}
-                            value={currentUser.roomId}
-                        />
+                        <div className="relative">
+                            <Key className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform text-white/40" />
+                            <input
+                                id="roomId"
+                                type="text"
+                                name="roomId"
+                                placeholder="e.g. build-together-123"
+                                className="w-full rounded-2xl border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white placeholder-white/40 outline-none transition focus:border-primary focus:bg-white/10 focus:shadow-[0_0_0_2px_rgba(57,224,121,0.3)]"
+                                onChange={handleInputChanges}
+                                value={currentUser.roomId}
+                            />
+                        </div>
                     </div>
-                    <div className="relative flex flex-col gap-2">
+                    <div className="flex flex-col gap-2">
                         <label htmlFor="username" className="text-sm font-medium text-white/80">
                             Display name
                         </label>
-                        <UserIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform text-white/40" />
-                        <input
-                            id="username"
-                            type="text"
-                            name="username"
-                            placeholder="Your name"
-                            className="w-full rounded-2xl border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white placeholder-white/40 outline-none transition focus:border-primary focus:bg-white/10 focus:shadow-[0_0_0_2px_rgba(57,224,121,0.3)]"
-                            onChange={handleInputChanges}
-                            value={currentUser.username}
-                            ref={usernameRef}
-                        />
+                        <div className="relative">
+                            <UserIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform text-white/40" />
+                            <input
+                                id="username"
+                                type="text"
+                                name="username"
+                                placeholder="Your name"
+                                className="w-full rounded-2xl border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white placeholder-white/40 outline-none transition focus:border-primary focus:bg-white/10 focus:shadow-[0_0_0_2px_rgba(57,224,121,0.3)]"
+                                onChange={handleInputChanges}
+                                value={currentUser.username}
+                                ref={usernameRef}
+                            />
+                        </div>
                     </div>
                     <button
                         type="submit"
