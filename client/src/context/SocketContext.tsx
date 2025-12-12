@@ -16,6 +16,7 @@ import {
 import { toast } from "react-hot-toast"
 import { Socket, io } from "socket.io-client"
 import { useAppContext } from "./AppContext"
+import { useNavigate } from "react-router-dom"
 
 const SocketContext = createContext<SocketContextType | null>(null)
 
@@ -30,8 +31,8 @@ export const useSocket = (): SocketContextType => {
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
 
 const SocketProvider = ({ children }: { children: ReactNode }) => {
+    const navigate = useNavigate()
     const {
-        users,
         setUsers,
         setStatus,
         setCurrentUser,
@@ -45,6 +46,8 @@ const SocketProvider = ({ children }: { children: ReactNode }) => {
             }),
         [],
     )
+
+
 
     const handleError = useCallback(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,20 +74,30 @@ const SocketProvider = ({ children }: { children: ReactNode }) => {
             setUsers(users)
             toast.dismiss()
             setStatus(USER_STATUS.JOINED)
-
+            navigate(`/editor/${user.roomId}`)
             if (users.length > 1) {
                 toast.loading("Syncing data, please wait...")
             }
         },
-        [setCurrentUser, setStatus, setUsers],
+        [setCurrentUser, setStatus, setUsers, navigate],
+    )
+
+    const handleUserJoined = useCallback(
+        ({ user }: { user: RemoteUser }) => {
+            toast.success(`${user.username} joined the room`)
+            setUsers(prevUsers => [...prevUsers, user])
+        },
+        [setUsers],
     )
 
     const handleUserLeft = useCallback(
-        ({ user }: { user: User }) => {
+        ({ user }: { user: RemoteUser }) => {
             toast.success(`${user.username} left the room`)
-            setUsers(users.filter((u: User) => u.username !== user.username))
+            setUsers(prevUsers =>
+                prevUsers.filter((u: RemoteUser) => u.username !== user.username),
+            )
         },
-        [setUsers, users],
+        [setUsers],
     )
 
     const handleRequestDrawing = useCallback(
@@ -102,10 +115,23 @@ const SocketProvider = ({ children }: { children: ReactNode }) => {
     )
 
     useEffect(() => {
+        const handleConnect = () => {
+            setStatus(USER_STATUS.CONNECTED)
+            toast.dismiss()
+            toast.success("Connected to the server")
+        }
+        socket.on("connect", handleConnect)
+        return () => {
+            socket.off("connect", handleConnect)
+        }
+    }, [socket, setStatus])
+
+    useEffect(() => {
         socket.on("connect_error", handleError)
         socket.on("connect_failed", handleError)
         socket.on(SocketEvent.USERNAME_EXISTS, handleUsernameExist)
         socket.on(SocketEvent.JOIN_ACCEPTED, handleJoiningAccept)
+        socket.on(SocketEvent.USER_JOINED, handleUserJoined)
         socket.on(SocketEvent.USER_DISCONNECTED, handleUserLeft)
         socket.on(SocketEvent.REQUEST_DRAWING, handleRequestDrawing)
         socket.on(SocketEvent.SYNC_DRAWING, handleDrawingSync)
@@ -115,6 +141,7 @@ const SocketProvider = ({ children }: { children: ReactNode }) => {
             socket.off("connect_failed")
             socket.off(SocketEvent.USERNAME_EXISTS)
             socket.off(SocketEvent.JOIN_ACCEPTED)
+            socket.off(SocketEvent.USER_JOINED)
             socket.off(SocketEvent.USER_DISCONNECTED)
             socket.off(SocketEvent.REQUEST_DRAWING)
             socket.off(SocketEvent.SYNC_DRAWING)
@@ -124,10 +151,11 @@ const SocketProvider = ({ children }: { children: ReactNode }) => {
         handleError,
         handleJoiningAccept,
         handleRequestDrawing,
+        handleUserJoined,
         handleUserLeft,
         handleUsernameExist,
-        setUsers,
         socket,
+        navigate,
     ])
 
     return (

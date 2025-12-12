@@ -27,9 +27,16 @@ enum SocketEvent {
     REQUEST_DRAWING = "request-drawing",
     SYNC_DRAWING = "sync-drawing",
     DRAWING_UPDATE = "drawing-update",
+    // Legacy sandbox terminal events (kept for backward compatibility)
     TERMINAL_EXECUTE = "terminal-execute",
     TERMINAL_OUTPUT = "terminal-output",
     TERMINAL_RESET = "terminal-reset",
+    // Live process streaming events
+    TERMINAL_RUN_COMMAND = "terminal-run-command",
+    TERMINAL_STREAM = "terminal-stream",
+    TERMINAL_STATUS = "terminal-status",
+    TERMINAL_INPUT = "terminal-input",
+    TERMINAL_STOP = "terminal-stop",
 }
 
 interface SocketContext {

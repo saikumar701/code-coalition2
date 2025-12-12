@@ -9,6 +9,7 @@ interface FileSystemItem {
     children?: FileSystemItem[]
     content?: FileContent
     isOpen?: boolean
+    language?: string
 }
 
 interface FileContext {

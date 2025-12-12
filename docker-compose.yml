@@ -5,9 +5,6 @@ services:
       context: ./server
       dockerfile: Dockerfile
       target: runner
-    volumes:
-      - ./server:/app
-      - /build/node_modules
     networks:
       - Code-Sync
     ports:
@@ -19,9 +16,6 @@ services:
       context: ./client
       dockerfile: Dockerfile
       target: runner
-    volumes:
-      - ./client:/app
-      - /build/node_modules
     networks:
       - Code-Sync
     ports:

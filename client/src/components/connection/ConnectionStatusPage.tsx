@@ -1,8 +1,11 @@
+import { useAppContext } from "@/context/AppContext";
 import { useNavigate } from "react-router-dom"
 
 function ConnectionStatusPage() {
+    const { status } = useAppContext();
     return (
         <div className="flex h-screen min-h-screen flex-col items-center justify-center gap-6 px-4 text-center">
+            <p className="text-lg font-medium text-slate-300">Current Status: {status}</p>
             <ConnectionError />
         </div>
     )

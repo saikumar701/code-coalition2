@@ -2,9 +2,9 @@ enum VIEWS {
     FILES = "FILES",
     CHATS = "CHATS",
     CLIENTS = "CLIENTS",
-    RUN = "RUN",
     COPILOT = "COPILOT",
     SETTINGS = "SETTINGS",
+    DRAWING = "DRAWING",
 }
 
 interface ViewContext {

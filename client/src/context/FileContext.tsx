@@ -44,13 +44,17 @@ function FileContextProvider({ children }: { children: ReactNode }) {
 
     const [fileStructure, setFileStructure] =
         useState<FileSystemItem>(initialFileStructure)
-    const initialOpenFiles = fileStructure.children
-        ? fileStructure.children
-        : []
-    const [openFiles, setOpenFiles] =
-        useState<FileSystemItem[]>(initialOpenFiles)
+
+    const defaultFile: FileSystemItem = {
+        id: uuidv4(),
+        name: "welcome.txt",
+        type: "file",
+        content: "Welcome to Code-Coalition!",
+    }
+
+    const [openFiles, setOpenFiles] = useState<FileSystemItem[]>([defaultFile])
     const [activeFile, setActiveFile] = useState<FileSystemItem | null>(
-        openFiles[0],
+        defaultFile,
     )
 
     // Function to toggle the isOpen property of a directory (Directory Open/Close)
@@ -466,8 +470,13 @@ function FileContextProvider({ children }: { children: ReactNode }) {
                     }),
                 )
             }
+
+            socket.emit(SocketEvent.FILE_UPDATED, {
+                fileId,
+                newContent,
+            })
         },
-        [openFiles],
+        [openFiles, socket],
     )
 
     const renameFile = useCallback(

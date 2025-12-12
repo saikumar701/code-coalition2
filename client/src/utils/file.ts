@@ -17,6 +17,14 @@ export const initialFileStructure: FileSystemItem = {
             type: "file",
             name: "index.js",
             content: initialCode,
+            language: "javascript",
+        },
+        {
+            id: uuidv4(),
+            name: "test.py",
+            type: "file",
+            content: 'print("Hello, World!")',
+            language: "python",
         },
     ],
 }
